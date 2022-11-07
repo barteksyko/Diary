@@ -69,7 +69,11 @@ namespace WpfApp1.ViewModels
         public ObservableCollection<Group> Groups
         {
             get { return _groups; }
-            set { _groups = value; }
+            set 
+            { 
+                _groups = value;
+                OnPropertyChanged();
+            }
         }
 
         private void RefreshStudent(object obj)

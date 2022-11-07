@@ -7,6 +7,7 @@
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
+        Name="AddEditStudentWindow"
         Title="Dane ucznia" Height="520" Width="400">
     <Grid>
         <Grid.RowDefinitions>
@@ -29,41 +30,86 @@
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
         
-        <Label Content="Id:" Margin="5"></Label>
-        <TextBox Grid.Column="1" Margin="5"></TextBox>
+        <Label 
+            Visibility="{Binding IsUpdate, Converter={StaticResource BooleanToVisibilityConverter}}" 
+            Content="Id:" 
+            Margin="5"
+            >            
+        </Label>
+        <TextBox 
+            Visibility="{Binding IsUpdate, Converter={StaticResource BooleanToVisibilityConverter}}" 
+            Text="{Binding Student.Id}" 
+            IsReadOnly="True" 
+            Grid.Column="1" 
+            Margin="5"
+            >            
+        </TextBox>
 
         <Label Content="Imię:" Grid.Row="1" Margin="5"></Label>
-        <TextBox Grid.Row="1" Grid.Column="1" Margin="5"></TextBox>
+        <TextBox Text="{Binding Student.FirstName}" Grid.Row="1" Grid.Column="1" Margin="5"></TextBox>
 
         <Label Content="Nazwisko:" Grid.Row="2" Margin="5"></Label>
-        <TextBox Grid.Row="2" Grid.Column="1" Margin="5"></TextBox>
+        <TextBox Text="{Binding Student.LastName}" Grid.Row="2" Grid.Column="1" Margin="5"></TextBox>
 
         <Label Content="Matematyka:" Grid.Row="3" Margin="5"></Label>
-        <TextBox Grid.Row="3" Grid.Column="1" Margin="5"></TextBox>
+        <TextBox Text="{Binding Student.Math}" Grid.Row="3" Grid.Column="1" Margin="5"></TextBox>
 
         <Label Content="Technologia:" Grid.Row="4" Margin="5"></Label>
-        <TextBox Grid.Row="4" Grid.Column="1" Margin="5"></TextBox>
+        <TextBox Text="{Binding Student.Technology}" Grid.Row="4" Grid.Column="1" Margin="5"></TextBox>
 
         <Label Content="Fizyka:" Grid.Row="5" Margin="5"></Label>
-        <TextBox Grid.Row="5" Grid.Column="1" Margin="5"></TextBox>
+        <TextBox Text="{Binding Student.Physics}" Grid.Row="5" Grid.Column="1" Margin="5"></TextBox>
 
         <Label Content="Jęz. pol.:" Grid.Row="6" Margin="5"></Label>
-        <TextBox Grid.Row="6" Grid.Column="1" Margin="5"></TextBox>
+        <TextBox Text="{Binding Student.PolishLang}" Grid.Row="6" Grid.Column="1" Margin="5"></TextBox>
 
         <Label Content="Jęz. obc.:" Grid.Row="7" Margin="5"></Label>
-        <TextBox Grid.Row="7" Grid.Column="1" Margin="5"></TextBox>
+        <TextBox Text="{Binding Student.ForeignLang}" Grid.Row="7" Grid.Column="1" Margin="5"></TextBox>
 
         <Label Content="Grupa:" Grid.Row="8" Margin="5"></Label>
-        <ComboBox Grid.Row="8" Grid.Column="1" Margin="5"></ComboBox>
+        <ComboBox 
+            Grid.Row="8" 
+            Grid.Column="1" 
+            Margin="5"
+            ItemsSource="{Binding Groups}"
+            SelectedValue="{Binding Student.Group.Id}"
+            DisplayMemberPath="Name"
+            SelectedValuePath="Id"
+            >            
+        </ComboBox>
 
-        <CheckBox Content="Zajęcia dodatkowe" Grid.Row="9" Grid.Column="1" Margin="5"></CheckBox>
+        <CheckBox IsChecked="{Binding Student.Activities}" Content="Zajęcia dodatkowe" Grid.Row="9" Grid.Column="1" Margin="5"></CheckBox>
 
         <Label Content="Uwagi:" Grid.Row="10" Margin="5"></Label>
-        <TextBox Grid.Row="10" Grid.Column="1" Margin="5"></TextBox>
+        <TextBox 
+            Text="{Binding Student.Comments}" 
+            Grid.Row="10" 
+            Grid.Column="1" 
+            Margin="5"
+            TextWrapping="Wrap"
+            AcceptsReturn="True"
+            >            
+        </TextBox>
 
         <StackPanel Orientation="Horizontal" Grid.Row="11" Grid.Column="1" HorizontalAlignment="Right">
-            <Button Content="Anuluj" Height="25" Width="100" Margin="5"></Button>
-            <Button Content="Zatwierdź" Height="25" Width="100" Margin="5"></Button>
+            <Button 
+                Command="{Binding CloseCommand}" 
+                CommandParameter="{Binding ElementName=AddEditStudentWindow}"
+                Content="Anuluj" 
+                Height="25" 
+                Width="100" 
+                Margin="5"
+                >                
+            </Button>
+            <Button 
+                Command="{Binding ConfirmCommand}" 
+                CommandParameter="{Binding ElementName=AddEditStudentWindow}"
+                Content="Zatwierdź" 
+                Height="25" 
+                Width="100" 
+                Margin="5"
+                >                
+            </Button>
         </StackPanel>
     </Grid>
 </mah:MetroWindow>
