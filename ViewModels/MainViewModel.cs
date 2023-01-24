@@ -106,6 +106,7 @@ namespace WpfApp1.ViewModels
             var addEditStudentWindow = new AddEditStudentView(obj as Student);
             addEditStudentWindow.Closed += AddEditStudentWindow_Closed;
             addEditStudentWindow.ShowDialog();
+
         }
 
         private void AddEditStudentWindow_Closed(object sender, EventArgs e)
