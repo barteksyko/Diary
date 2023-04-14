@@ -1,26 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 using WpfApp1.Commands;
-using WpfApp1.Models;
+using WpfApp1.Models.Domains;
 using WpfApp1.Models.Wrappers;
 
 namespace WpfApp1.ViewModels
 {
     public class AddEditStudentViewModel : ViewModelBase
     {
+        private Repository _repository = new Repository();
+
         public AddEditStudentViewModel(StudentWrapper student = null)
         {
             CloseCommand = new RelayCommand(Close);
             ConfirmCommand = new RelayCommand(Confirm);
 
-            if(student == null)
+            if (student == null)
             {
                 Student = new StudentWrapper();
             }
@@ -51,7 +47,7 @@ namespace WpfApp1.ViewModels
         public bool IsUpdate
         {
             get { return _isUpdate; }
-            set 
+            set
             {
                 _isUpdate = value;
                 OnPropertyChanged();
@@ -69,8 +65,8 @@ namespace WpfApp1.ViewModels
             }
         }
 
-        private ObservableCollection<GroupWrapper> _groups;
-        public ObservableCollection<GroupWrapper> Groups
+        private ObservableCollection<Group> _groups;
+        public ObservableCollection<Group> Groups
         {
             get { return _groups; }
             set
@@ -96,12 +92,12 @@ namespace WpfApp1.ViewModels
 
         private void UpdateStudent()
         {
-            // baza danych
+            _repository.UpdateStudent(Student);
         }
 
         private void AddStudent()
         {
-            // baza danych 
+            _repository.AddStudent(Student);
         }
 
         private void Close(object obj)
@@ -116,14 +112,12 @@ namespace WpfApp1.ViewModels
 
         private void InitGroups()
         {
-            Groups = new ObservableCollection<GroupWrapper>()
-            {
-                new GroupWrapper(){Id = 0, Name = "-- brak --"},
-                new GroupWrapper(){Id = 1, Name = "1A"},
-                new GroupWrapper(){Id = 2, Name = "2A"},
-            };
+            var groups = _repository.GetGroups();
+            groups.Insert(0, new Group() { Id = 0, Name = "-- brak --" });
 
-            Student.Group.Id = 0;
+            Groups = new ObservableCollection<Group>(groups);
+
+            SelectedGroupId = Student.Group.Id;
         }
     }
 }

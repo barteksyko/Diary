@@ -2,11 +2,11 @@
 using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using WpfApp1.Commands;
+using WpfApp1.Models.Domains;
 using WpfApp1.Models.Wrappers;
 using WpfApp1.Views;
 
@@ -14,6 +14,8 @@ namespace WpfApp1.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
+        private Repository _repository = new Repository();
+
         public MainViewModel()
         {
             AddStudentCommand = new RelayCommand(AddEditStudent);
@@ -34,8 +36,8 @@ namespace WpfApp1.ViewModels
         public StudentWrapper SelectedStudent
         {
             get { return _selectedStudent; }
-            set 
-            { 
+            set
+            {
                 _selectedStudent = value;
                 OnPropertyChanged();
             }
@@ -53,22 +55,22 @@ namespace WpfApp1.ViewModels
         }
 
         private int _selectedGroupId;
-        public int  SelectedGroupId
+        public int SelectedGroupId
         {
             get { return _selectedGroupId; }
-            set 
-            { 
+            set
+            {
                 _selectedGroupId = value;
                 OnPropertyChanged();
             }
         }
 
-        private ObservableCollection<GroupWrapper> _groups;
-        public ObservableCollection<GroupWrapper> Groups
+        private ObservableCollection<Group> _groups;
+        public ObservableCollection<Group> Groups
         {
             get { return _groups; }
-            set 
-            { 
+            set
+            {
                 _groups = value;
                 OnPropertyChanged();
             }
@@ -84,17 +86,17 @@ namespace WpfApp1.ViewModels
             var metroWindow = Application.Current.MainWindow as MetroWindow;
             var dialog = await metroWindow.ShowMessageAsync
                 (
-                "Usuwanie ucznia", 
+                "Usuwanie ucznia",
                 $"Czy na pewno chcesz usunąć ucznia {SelectedStudent.FirstName} {SelectedStudent.LastName}?",
                 MessageDialogStyle.AffirmativeAndNegative
                 );
 
-            if(dialog != MessageDialogResult.Affirmative)
+            if (dialog != MessageDialogResult.Affirmative)
             {
                 return;
             }
 
-            //usuwanie ucznia z bazy
+            _repository.DeleteStudent(SelectedStudent.Id);
 
             RefreshDiary();
         }
@@ -104,7 +106,6 @@ namespace WpfApp1.ViewModels
             var addEditStudentWindow = new AddEditStudentView(obj as StudentWrapper);
             addEditStudentWindow.Closed += AddEditStudentWindow_Closed;
             addEditStudentWindow.ShowDialog();
-
         }
 
         private void AddEditStudentWindow_Closed(object sender, EventArgs e)
@@ -119,37 +120,16 @@ namespace WpfApp1.ViewModels
 
         private void RefreshDiary()
         {
-            Students = new ObservableCollection<StudentWrapper>
-            {
-                new StudentWrapper()
-                {
-                    FirstName="Kazimierz",
-                    LastName="Szpin",
-                    Group = new GroupWrapper(){Id = 1},
-                },
-                new StudentWrapper()
-                {
-                    FirstName="Marek",
-                    LastName="Nowak",
-                    Group = new GroupWrapper(){Id = 2},
-                },
-                new StudentWrapper()
-                {
-                    FirstName="Jan",
-                    LastName="Kowalski",
-                    Group = new GroupWrapper(){Id = 1},
-                }
-            };
+            Students = new ObservableCollection<StudentWrapper>(
+                _repository.GetStudents(SelectedGroupId));
         }
 
         private void InitGroups()
         {
-            Groups = new ObservableCollection<GroupWrapper>()
-            {
-                new GroupWrapper(){Id = 0, Name = "Wszystkie"},
-                new GroupWrapper(){Id = 1, Name = "1A"},
-                new GroupWrapper(){Id = 2, Name = "2A"},
-            };
+            var groups = _repository.GetGroups();
+            groups.Insert(0, new Group() { Id = 0, Name = "Wszystkie" });
+
+            Groups = new ObservableCollection<Group>(groups);
 
             SelectedGroupId = 0;
         }
