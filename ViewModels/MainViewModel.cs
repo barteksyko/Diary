@@ -1,15 +1,13 @@
 ﻿using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using WpfApp1.Commands;
-using WpfApp1.Models;
+using WpfApp1.Models.Wrappers;
 using WpfApp1.Views;
 
 namespace WpfApp1.ViewModels
@@ -32,8 +30,8 @@ namespace WpfApp1.ViewModels
         public ICommand DeleteStudentCommand { get; set; }
         public ICommand RefreshStudentsCommand { get; set; }
 
-        private Student _selectedStudent;
-        public Student SelectedStudent
+        private StudentWrapper _selectedStudent;
+        public StudentWrapper SelectedStudent
         {
             get { return _selectedStudent; }
             set 
@@ -43,8 +41,8 @@ namespace WpfApp1.ViewModels
             }
         }
 
-        private ObservableCollection<Student> _students;
-        public ObservableCollection<Student> Students
+        private ObservableCollection<StudentWrapper> _students;
+        public ObservableCollection<StudentWrapper> Students
         {
             get { return _students; }
             set
@@ -65,8 +63,8 @@ namespace WpfApp1.ViewModels
             }
         }
 
-        private ObservableCollection<Group> _groups;
-        public ObservableCollection<Group> Groups
+        private ObservableCollection<GroupWrapper> _groups;
+        public ObservableCollection<GroupWrapper> Groups
         {
             get { return _groups; }
             set 
@@ -103,7 +101,7 @@ namespace WpfApp1.ViewModels
 
         private void AddEditStudent(object obj)
         {
-            var addEditStudentWindow = new AddEditStudentView(obj as Student);
+            var addEditStudentWindow = new AddEditStudentView(obj as StudentWrapper);
             addEditStudentWindow.Closed += AddEditStudentWindow_Closed;
             addEditStudentWindow.ShowDialog();
 
@@ -121,36 +119,36 @@ namespace WpfApp1.ViewModels
 
         private void RefreshDiary()
         {
-            Students = new ObservableCollection<Student>
+            Students = new ObservableCollection<StudentWrapper>
             {
-                new Student()
+                new StudentWrapper()
                 {
                     FirstName="Kazimierz",
                     LastName="Szpin",
-                    Group = new Group(){Id = 1},
+                    Group = new GroupWrapper(){Id = 1},
                 },
-                new Student()
+                new StudentWrapper()
                 {
                     FirstName="Marek",
                     LastName="Nowak",
-                    Group = new Group(){Id = 2},
+                    Group = new GroupWrapper(){Id = 2},
                 },
-                new Student()
+                new StudentWrapper()
                 {
                     FirstName="Jan",
                     LastName="Kowalski",
-                    Group = new Group(){Id = 1},
+                    Group = new GroupWrapper(){Id = 1},
                 }
             };
         }
 
         private void InitGroups()
         {
-            Groups = new ObservableCollection<Group>()
+            Groups = new ObservableCollection<GroupWrapper>()
             {
-                new Group(){Id = 0, Name = "Wszystkie"},
-                new Group(){Id = 1, Name = "1A"},
-                new Group(){Id = 2, Name = "2A"},
+                new GroupWrapper(){Id = 0, Name = "Wszystkie"},
+                new GroupWrapper(){Id = 1, Name = "1A"},
+                new GroupWrapper(){Id = 2, Name = "2A"},
             };
 
             SelectedGroupId = 0;

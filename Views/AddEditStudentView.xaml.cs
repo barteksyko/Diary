@@ -12,7 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using WpfApp1.Models;
+using WpfApp1.Models.Wrappers;
 using WpfApp1.ViewModels;
 
 namespace WpfApp1.Views
@@ -22,7 +22,7 @@ namespace WpfApp1.Views
     /// </summary>
     public partial class AddEditStudentView : MetroWindow
     {
-        public AddEditStudentView( Student student = null)
+        public AddEditStudentView( StudentWrapper student = null)
         {
             InitializeComponent();
             DataContext = new AddEditStudentViewModel(student);
