@@ -22,6 +22,7 @@ namespace WpfApp1.ViewModels
             EditStudentCommand = new RelayCommand(AddEditStudent, CanEditDeleteStudent);
             DeleteStudentCommand = new AsyncRelayCommand(DeleteStudent, CanEditDeleteStudent);
             RefreshStudentsCommand = new RelayCommand(RefreshStudent);
+            SettingsCommand = new RelayCommand(Settings);
 
             RefreshDiary();
             InitGroups();
@@ -31,6 +32,7 @@ namespace WpfApp1.ViewModels
         public ICommand EditStudentCommand { get; set; }
         public ICommand DeleteStudentCommand { get; set; }
         public ICommand RefreshStudentsCommand { get; set; }
+        public ICommand SettingsCommand { get; set; }
 
         private StudentWrapper _selectedStudent;
         public StudentWrapper SelectedStudent
@@ -132,6 +134,12 @@ namespace WpfApp1.ViewModels
             Groups = new ObservableCollection<Group>(groups);
 
             SelectedGroupId = 0;
+        }
+
+        private void Settings(object obj)
+        {
+            var settingsWindows = new SettingsView();
+            settingsWindows.ShowDialog();
         }
     }
 }

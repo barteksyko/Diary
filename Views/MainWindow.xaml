@@ -64,6 +64,15 @@
                 Margin="5"
                 >                
             </Button>
+
+            <Button
+                Command="{Binding SettingsCommand}"
+                Content="Ustawienia"
+                Height="25" 
+                Width="100" 
+                Margin="5"
+                >
+            </Button>
         </StackPanel>
         
         <DataGrid 
