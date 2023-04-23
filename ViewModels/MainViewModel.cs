@@ -23,16 +23,17 @@ namespace WpfApp1.ViewModels
             DeleteStudentCommand = new AsyncRelayCommand(DeleteStudent, CanEditDeleteStudent);
             RefreshStudentsCommand = new RelayCommand(RefreshStudent);
             SettingsCommand = new RelayCommand(Settings);
+            LoadedWindowCommand = new RelayCommand(LoadedWindow);
 
-            RefreshDiary();
-            InitGroups();
+            LoadedWindow(null);
         }
-
+        
         public ICommand AddStudentCommand { get; set; }
         public ICommand EditStudentCommand { get; set; }
         public ICommand DeleteStudentCommand { get; set; }
         public ICommand RefreshStudentsCommand { get; set; }
         public ICommand SettingsCommand { get; set; }
+        public ICommand LoadedWindowCommand { get; set; }
 
         private StudentWrapper _selectedStudent;
         public StudentWrapper SelectedStudent
@@ -138,8 +139,47 @@ namespace WpfApp1.ViewModels
 
         private void Settings(object obj)
         {
-            var settingsWindows = new SettingsView();
+            var settingsWindows = new SettingsView(true);
             settingsWindows.ShowDialog();
+        }
+        private bool IsValidConnectionToDatabase()
+        {
+            try
+            {
+                using (var context = new ApplicationDbContext())
+                {
+                    context.Database.Connection.Open();
+                    context.Database.Connection.Close();
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        private async void LoadedWindow(object obj)
+        {
+            if (!IsValidConnectionToDatabase())
+            {
+                var metroWindows = Application.Current.MainWindow as MetroWindow;
+                var dialog = await metroWindows.ShowMessageAsync("Błąd połączenia", $"Nie można połączyć się z bazą danych. Czy chcesz zmienić ustawienia?", MessageDialogStyle.AffirmativeAndNegative);
+
+                if (dialog == MessageDialogResult.Negative)
+                {
+                    Application.Current.Shutdown();
+                }
+                else
+                {
+                    var settingsWindows = new SettingsView(false);
+                    settingsWindows.ShowDialog();
+                }
+            }
+            else
+            {
+                RefreshDiary();
+                InitGroups();
+            }
         }
     }
 }

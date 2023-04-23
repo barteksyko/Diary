@@ -9,10 +9,10 @@ namespace WpfApp1.Views
     /// </summary>
     public partial class SettingsView : MetroWindow
     {
-        public SettingsView() 
+        public SettingsView(bool canCloseWindow) 
         {
             InitializeComponent();
-            DataContext = new SettingsViewModel();
+            DataContext = new SettingsViewModel(canCloseWindow);
         }
     }
 }

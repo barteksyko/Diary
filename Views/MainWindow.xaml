@@ -4,28 +4,36 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-        xmlns:local="clr-namespace:WpfApp1"
+        xmlns:local="clr-namespace:WpfApp1"        
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Title="Dziennik ucznia" Height="450" Width="900">
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadedWindowCommand}"></i:InvokeCommandAction>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
     <Grid>
-        
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
-        
+
         <StackPanel Grid.Row="0" Orientation="Horizontal">
-            
+
             <Button
                 Command="{Binding AddStudentCommand}"
                 Content="Dodaj" 
                 Height="25" 
                 Width="100" 
                 Margin="5"
-                >                
+                >
             </Button>
-            
+
             <Button
                 Command="{Binding EditStudentCommand}"
                 CommandParameter="{Binding SelectedStudent}"
@@ -33,18 +41,18 @@
                 Height="25" 
                 Width="100" 
                 Margin="5"
-                >                
+                >
             </Button>
-            
+
             <Button
                 Command="{Binding DeleteStudentCommand}"
                 Content="Usuń" 
                 Height="25" 
                 Width="100" 
                 Margin="5"
-                >                
+                >
             </Button>
-            
+
             <ComboBox 
                 Height="25" 
                 Width="150" 
@@ -53,16 +61,16 @@
                 SelectedValue="{Binding SelectedGroupId}"
                 DisplayMemberPath="Name"
                 SelectedValuePath="Id"
-                >                
+                >
             </ComboBox>
-            
+
             <Button 
                 Command="{Binding RefreshStudentsCommand}" 
                 Content="Odśwież" 
                 Height="25" 
                 Width="100" 
                 Margin="5"
-                >                
+                >
             </Button>
 
             <Button
@@ -74,7 +82,7 @@
                 >
             </Button>
         </StackPanel>
-        
+
         <DataGrid 
             Grid.Row="1" 
             Margin="5"

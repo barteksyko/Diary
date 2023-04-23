@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using WpfApp1.Properties;
 
 namespace WpfApp1.Models
@@ -26,6 +21,7 @@ namespace WpfApp1.Models
                 Settings.Default.ServerAddress = value;
             } 
         }
+
         public string ServerName
         {
             get
